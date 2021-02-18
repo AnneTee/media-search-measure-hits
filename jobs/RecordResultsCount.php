@@ -15,6 +15,7 @@ class RecordResultsCount {
 
     public function run() {
         $start_time = microtime(true);
+        echo "Running...\n";
 
         $filename = $this->config['filename'];
         $langCode = $this->config['langCode'];
@@ -29,7 +30,7 @@ class RecordResultsCount {
 
         $count = 0;
         // For each article...
-        foreach ( $rows as $row ) {
+        foreach ( $rows as $index => $row ) {
             $rowData = explode( "\t", $row);
             if ( isset( $rowData[3] ) ) {
                 // Record result.
@@ -41,6 +42,10 @@ class RecordResultsCount {
                 if ( $totalhits > 0 ) {
                     $count++;
                 }
+            }
+
+            if ( $index > 0 && ( $index + 1 ) % 100 === 0 ) {
+                echo $index + 1 . " titles tested...\n";
             }
         }
 
