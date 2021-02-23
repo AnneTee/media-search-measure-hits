@@ -27,7 +27,7 @@ class GetResultsData {
             }
 
             $rowData = explode( "\t", $row);
-            if ( isset( $rowData[4] ) && $rowData[4] > 0 ) {
+            if ( isset( $rowData[2] ) && $rowData[2] > 0 ) {
                 $count++;
             }
         }
