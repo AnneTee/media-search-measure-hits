@@ -24,10 +24,7 @@ class RecordRandomSample {
         $resultsFile = fopen( $resultsFilename, 'w+' );
 
         $file = file_get_contents( $filename );
-
-        // Get array of rows, remove the first one which is column titles.
         $rows = explode( "\n", $file);
-        array_shift( $rows );
 
         $hasResultsCount = 0;
         $itemsProcessed = 0;
