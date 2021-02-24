@@ -19,7 +19,7 @@ class RecordRandomSample {
 
         $filename = $this->config['filename'];
         $langCode = $this->config['langCode'];
-        $limit = $this->config['limit'] || 1000;
+        $limit = $this->config['limit'] ?? 1000;
         $resultsFilename = 'output/results_' . $langCode . '_' . time() . '.tsv';
         $resultsFile = fopen( $resultsFilename, 'w+' );
 
@@ -29,7 +29,8 @@ class RecordRandomSample {
         $rows = explode( "\n", $file);
         array_shift( $rows );
 
-        $count = 0;
+        $hasResultsCount = 0;
+        $itemsProcessed = 0;
         $indecesToSearch = $this->getUniqueRandomNumbers( 0, count($rows) / 2, $limit );
         foreach ( $indecesToSearch as $index ) {
             $row = $rows[$index];
@@ -44,12 +45,17 @@ class RecordRandomSample {
 
                 // We'll also echo a count at the end of articles with results.
                 if ( $totalhits > 0 ) {
-                    $count++;
+                    $hasResultsCount++;
                 }
+            }
+
+            $itemsProcessed++;
+            if ( $itemsProcessed > 0 && ( $itemsProcessed ) % 100 === 0 ) {
+                echo $itemsProcessed . " titles tested...\n";
             }
         }
 
-        echo "Number of articles with at least one result: " . $count . "\n";
+        echo "Number of articles with at least one result: " . $hasResultsCount . "\n";
 
         $end_time = microtime(true);
         $execution_time = ($end_time - $start_time);
@@ -96,7 +102,7 @@ class RecordRandomSample {
     }
 }
 
-$config = getopt( '', [ 'filename:', 'langCode:' ] );
+$config = getopt( '', [ 'filename:', 'langCode:', 'limit:' ] );
 
 $job = new RecordRandomSample( $config );
 $job->run();
